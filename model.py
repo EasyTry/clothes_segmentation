@@ -1,22 +1,12 @@
 import io
 import numpy as np
-
-import socket
-import timeit
-import numpy as np
+import cv2
 from PIL import Image
-from datetime import datetime
-import os
-import sys
-from collections import OrderedDict
-#sys.path.append('./Graphonomy/')
-# PyTorch includes
+
 import torch
 from torch.autograd import Variable
 from torchvision import transforms
 import torch.nn.functional as F
-import cv2
-
 
 from Graphonomy.networks import deeplab_xception_transfer, graph
 from Graphonomy.dataloaders import custom_transforms as tr
@@ -25,7 +15,7 @@ torch.backends.cudnn.enabled = True
 torch.backends.cudnn.deterministic = True
 
 class ClothesSegmentator:
-    def __init__(self, height):
+    def __init__(self):
         checkpoint_dir = './pretrained_weights/'
         self.model_restore = checkpoint_dir + 'inference.pth'
         self.net = deeplab_xception_transfer.deeplab_xception_transfer_projection_savemem(n_classes=20,
@@ -106,7 +96,7 @@ class ClothesSegmentator:
             # print(img_transform(img, composed_transforms_ts))
             testloader_flip_list.append(self.img_transform(img, composed_transforms_ts_flip))
         # print(testloader_list)
-        start_time = timeit.default_timer()
+        
         # One testing epoch
         self.net.eval()
         # 1 0.5 0.75 1.25 1.5 1.75 ; flip:
