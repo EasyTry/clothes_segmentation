@@ -18,6 +18,7 @@ class ClothesSegmentator:
     def __init__(self):
         checkpoint_dir = './pretrained_weights/'
         self.model_restore = checkpoint_dir + 'inference.pth'
+        self.use_gpu = True
         self.net = deeplab_xception_transfer.deeplab_xception_transfer_projection_savemem(n_classes=20,
                                                                             hidden_layers=128,
                                                                             source_classes=7, )
@@ -115,7 +116,7 @@ class ClothesSegmentator:
             inputs = Variable(inputs, requires_grad=False)
 
             with torch.no_grad():
-                if use_gpu >= 0:
+                if self.use_gpu >= 0:
                     inputs = inputs.cuda()
                 # outputs = net.forward(inputs)
                 outputs = self.net.forward(inputs, adj1_test.cuda(), adj3_test.cuda(), adj2_test.cuda())
